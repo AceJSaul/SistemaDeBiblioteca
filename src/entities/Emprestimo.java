@@ -1,8 +1,11 @@
 package entities;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Emprestimo {
+
+    private DateTimeFormatter dateFt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private Livro livro;
     private User usuario;
@@ -46,5 +49,19 @@ public class Emprestimo {
 
     public void setDataDevolucao(LocalDate dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(livro.getTitle());
+        sb.append(", ");
+        sb.append(livro.getWriter());
+        sb.append(", ");
+        sb.append(dataEmprestimo.format(dateFt));
+        sb.append(", ");
+        sb.append(dataDevolucao.format(dateFt));
+
+        return sb.toString();
     }
 }

@@ -6,6 +6,11 @@ public class Livro {
     private String isbn;
     private Autor writer;
 
+    public Livro(String title, String isbn) {
+        this.title = title;
+        this.isbn = isbn;
+    }
+
     public Livro(String title, String isbn, Autor writer) {
         this.title = title;
         this.isbn = isbn;
