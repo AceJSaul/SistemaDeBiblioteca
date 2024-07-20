@@ -44,7 +44,7 @@ public class Program {
                     break;
             }
 
-
+            System.out.println();
             showMenu();
             userChoice = sc.nextInt();
         }
@@ -154,6 +154,7 @@ public class Program {
         for (User usuario : mainBiblioteca.getUsers()){
             if (usuario.getMatriculaNum() == numeroARemover){
                 mainBiblioteca.removeUser(usuario);
+                mainBiblioteca.getEmprestimos().removeIf(emprestimo -> emprestimo.getUsuario() == usuario);
                 System.out.println("Usuário removido");
                 break;
             }

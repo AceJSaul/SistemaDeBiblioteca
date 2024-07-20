@@ -52,6 +52,19 @@ public class Emprestimo {
         this.dataDevolucao = dataDevolucao;
     }
 
+    public String showOnlyLoan(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(livro.getTitle());
+        sb.append(", ");
+        sb.append(livro.getWriter().getName());
+        sb.append("\n");
+        sb.append(dataEmprestimo.format(dateFt));
+        sb.append(", ");
+        sb.append(dataDevolucao.format(dateFt));
+
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -59,7 +59,7 @@ public class User {
         sb.append("Empréstimos:");
 
         for(Emprestimo emprestimo : emprestimoList){
-            sb.append(emprestimo.toString() + "\n");
+            sb.append(emprestimo.showOnlyLoan() + "\n");
         }
 
         return sb.toString();
