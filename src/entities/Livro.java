@@ -28,4 +28,9 @@ public class Livro {
     public Autor getWriter() {
         return writer;
     }
+
+    @Override
+    public String toString(){
+        return title + ", " + writer.getName() + ", " + isbn;
+    }
 }

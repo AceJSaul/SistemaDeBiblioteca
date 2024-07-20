@@ -9,6 +9,7 @@ public class Biblioteca {
     private List<Livro> books = new ArrayList<>();
     private List<User> users = new ArrayList<>();
     private List<Autor> autores = new ArrayList<>();
+    private List<Emprestimo> emprestimos = new ArrayList<>();
 
     public Biblioteca(String name) {
         this.name = name;
@@ -28,6 +29,10 @@ public class Biblioteca {
 
     public List<User> getUsers() {
         return users;
+    }
+
+    public List<Emprestimo> getEmprestimos() {
+        return emprestimos;
     }
 
     public void addBook(Livro book){
@@ -52,6 +57,14 @@ public class Biblioteca {
 
     public void removeAutor(Autor autor){
         autores.remove(autor);
+    }
+
+    public void addEmprestimo(Emprestimo emprestimo){
+        emprestimos.add(emprestimo);
+    }
+
+    public void removeEmprestimo(Emprestimo emprestimo){
+        emprestimos.remove(emprestimo);
     }
 
     @Override

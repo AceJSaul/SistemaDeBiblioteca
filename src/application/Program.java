@@ -1,19 +1,16 @@
 package application;
 
-import entities.Autor;
-import entities.Biblioteca;
-import entities.Livro;
-import entities.User;
+import entities.*;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Program {
     public static Scanner sc = new Scanner(System.in);
+    public static Biblioteca mainBiblioteca = new Biblioteca("Biblioteca");
 
     public static void main(String[] args){
         System.out.print("Nome da Biblioteca: ");
-        String nomeDaBiblioteca = sc.nextLine();
-        Biblioteca mainBiblioteca = new Biblioteca(nomeDaBiblioteca);
 
         showMenu();
 
@@ -22,18 +19,29 @@ public class Program {
         while (userChoice != 9){
             switch (userChoice){
                 case 1:
-                    addBook(mainBiblioteca);
+                    addBook();
                     break;
                 case 2:
-                    removeBook(mainBiblioteca);
+                    removeBook();
                     break;
                 case 3:
-                    addUser(mainBiblioteca);
+                    addUser();
                     break;
                 case 4:
-                    removeUser(mainBiblioteca);
+                    removeUser();
                     break;
-
+                case 5:
+                    emprestar();
+                    break;
+                case 6:
+                    listaDeLivros();
+                    break;
+                case 7:
+                    listaDeUsers();
+                    break;
+                case 8:
+                    listaDeEmprestimos();
+                    break;
             }
 
 
@@ -58,7 +66,7 @@ public class Program {
         System.out.println();
     }
 
-    public static void addBook(Biblioteca biblioteca){
+    public static void addBook(){
         sc.nextLine();
         System.out.print("Nome do livro: ");
         String bookName = sc.nextLine();
@@ -70,10 +78,10 @@ public class Program {
         String nomeDoAutor = sc.nextLine();
 
         boolean isAuthorRegistered = false;
-        for(Autor autor : biblioteca.getAutores()){
+        for(Autor autor : mainBiblioteca.getAutores()){
             if(autor.getName().equals(nomeDoAutor)){
                 Livro newLivro = new Livro(bookName, isbn, autor);
-                biblioteca.addBook(newLivro);
+                mainBiblioteca.addBook(newLivro);
 
                 isAuthorRegistered = true;
 
@@ -102,29 +110,29 @@ public class Program {
                 autor = new Autor(nomeDoAutor);
             }
             // Adicionando autor à biblioteca
-            biblioteca.addAutor(autor);
+            mainBiblioteca.addAutor(autor);
             // Adicionando livro à lista de livros da biblioteca
             Livro newLivro = new Livro(bookName, isbn, autor);
-            biblioteca.addBook(newLivro);
+            mainBiblioteca.addBook(newLivro);
             System.out.println("Livro adicionado com sucesso");
         }
     }
 
-    public static void removeBook(Biblioteca biblioteca){
+    public static void removeBook(){
         sc.nextLine();
         System.out.print("Qual o título do livro que deseja retirar? ");
         String livroTitle = sc.nextLine();
 
-        for (Livro livro : biblioteca.getBooks()){
+        for (Livro livro : mainBiblioteca.getBooks()){
             if (livroTitle.equals(livro.getTitle())){
-                biblioteca.removeBook(livro);
+                mainBiblioteca.removeBook(livro);
                 System.out.println("Livro retirado com sucesso");
                 break;
             }
         }
     }
 
-    public static void addUser(Biblioteca biblioteca){
+    public static void addUser(){
         sc.nextLine();
         System.out.print("Nome do Usuário: ");
         String userName = sc.nextLine();
@@ -134,24 +142,75 @@ public class Program {
         int matriculaNum = sc.nextInt();
 
         User usuario = new User(userName, email, matriculaNum);
-        biblioteca.addUser(usuario);
+        mainBiblioteca.addUser(usuario);
+        System.out.println("Usuário adicionado!");
     }
 
-    public static void removeUser(Biblioteca biblioteca){
+    public static void removeUser(){
         sc.nextLine();
         System.out.println("Número de matrícula do usuário que deseja remover: ");
         int numeroARemover = sc.nextInt();
 
-        for (User usuario : biblioteca.getUsers()){
+        for (User usuario : mainBiblioteca.getUsers()){
             if (usuario.getMatriculaNum() == numeroARemover){
-                biblioteca.removeUser(usuario);
+                mainBiblioteca.removeUser(usuario);
                 System.out.println("Usuário removido");
                 break;
             }
         }
     }
 
-    public static void emprestar(Biblioteca biblioteca){
+    public static void emprestar(){
+        sc.nextLine();
 
+        System.out.print("Código do livro será emprestado: ");
+        String codigoDoLivroEmprestado = sc.nextLine();
+
+        // Procurando Livro
+        Livro livroAEmprestar;
+        for (Livro livro : mainBiblioteca.getBooks()){
+            if (livro.getIsbn().equals(codigoDoLivroEmprestado)){
+                livroAEmprestar = livro;
+                // Identificando usuário
+                System.out.print("Número da matrícula do usuário do empréstimo: ");
+                int userMatricula = sc.nextInt();
+                sc.nextLine();
+                System.out.print("Data do empréstimo (dd/mm/yyyy): ");
+                String dataDeEmprestimo = sc.nextLine();
+
+                // Convertendo a String data para LocalTime
+                String[] date = dataDeEmprestimo.split("/");
+                LocalDate dataDeEmprestar = LocalDate.of(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]));
+
+                // Procurando usuário a quem emprestar
+                for (User usuario : mainBiblioteca.getUsers()){
+                    if (usuario.getMatriculaNum() == userMatricula){
+                        Emprestimo emprestimoUser = new Emprestimo(livroAEmprestar, usuario, dataDeEmprestar);
+                        usuario.addEmprestimo(emprestimoUser);
+                        mainBiblioteca.addEmprestimo(emprestimoUser);
+                        System.out.println("Empréstimo realizado!");
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void listaDeLivros(){
+        for (Livro livro : mainBiblioteca.getBooks()){
+            System.out.println(livro);
+        }
+    }
+
+    public static void listaDeUsers(){
+        for (User user : mainBiblioteca.getUsers()){
+            System.out.println(user);
+        }
+    }
+
+    public static void listaDeEmprestimos(){
+        for (Emprestimo emprestimo : mainBiblioteca.getEmprestimos()){
+            System.out.println(emprestimo);
+        }
     }
 }

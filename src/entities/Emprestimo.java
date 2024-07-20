@@ -10,13 +10,14 @@ public class Emprestimo {
     private Livro livro;
     private User usuario;
     private LocalDate dataEmprestimo;
-    private LocalDate dataDevolucao = dataEmprestimo.plusWeeks(2);
+    private LocalDate dataDevolucao;
 
     // Constructor com data de devolução padrão
     public Emprestimo(Livro livro, User usuario, LocalDate dataEmprestimo) {
         this.livro = livro;
         this.usuario = usuario;
         this.dataEmprestimo = dataEmprestimo;
+        this.dataDevolucao = dataEmprestimo.plusWeeks(2);
     }
 
     // Constructor com data de devolução customizada
@@ -54,13 +55,17 @@ public class Emprestimo {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append(usuario.getName() + ", ");
+        sb.append(usuario.getMatriculaNum());
+        sb.append("\n");
         sb.append(livro.getTitle());
         sb.append(", ");
-        sb.append(livro.getWriter());
+        sb.append(livro.getWriter().getName());
         sb.append(", ");
         sb.append(dataEmprestimo.format(dateFt));
         sb.append(", ");
         sb.append(dataDevolucao.format(dateFt));
+        sb.append("\n");
 
         return sb.toString();
     }
